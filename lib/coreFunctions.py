@@ -5,11 +5,28 @@ from classes.author import Author
 from classes.genre import Genre
 
 def add_book(books, authors, genres):
-    genre_index = askMenu([genre[1].get_name() for genre in list(genres.items())], 
-    "Please choose a genre: ")
-    genre = list(genres.items())[genre_index-1][1]
+    # genre_index = askMenu([genre[1].get_name() for genre in list(genres.items())], 
+    # "Please choose a genre: ")
+    # genre = list(genres.items())[genre_index-1][1]
     book_name = str(input("Please input a name for the book: "))
-    author = search_dict(authors, "Please choose an author: ")
+    genre = ""
+    while genre == "":
+        chosen_genre = search_dict(genres, "Please choose a genre: ")
+        if chosen_genre == -1:
+            chosen_genre = add_genre(genres)
+        elif chosen_genre == -2:
+            return
+        elif chosen_genre != -1 and chosen_genre != -2 and chosen_genre != -3:
+            genre = chosen_genre
+    author = ""
+    while author == "":
+        chosen_author = search_dict(authors, "Please choose an author: ")
+        if chosen_author == -1:
+            chosen_author = add_author(authors)
+        elif chosen_author == -2:
+            return
+        elif chosen_author != -1 and chosen_author != -2 and chosen_author != -3:
+            author = chosen_author
     book_year = int(input("Please input a publish year: "))
     book_ISBN = int(input("Please input an ISBN: "))
     num_avail = int(input("Please input number available: "))
@@ -35,7 +52,7 @@ def add_genre(genres):
 def add_user(users):
     user_name = str(input("Please input a name for the user: "))
     ID = generateUniqueID()
-    new_user = User(user_name, ID)
+    new_user = User(user_name, ID, {})
     users.update({ID: new_user})
     return new_user
     
@@ -48,13 +65,28 @@ def display_names(dictionary):
 def search_dict(dictionary, text):
     entry_list = [entry[1].get_name() for entry in dictionary.items()]
     entry_list.append("Add new entry")
+    entry_list.append("Quit to main menu")
     entry_index = askMenu(entry_list, text)
     entry = ""
-    if entry_index == len(entry_list):
-        return -1
+    try:
+        entry_index = int(entry_index)
+        if entry_index == len(entry_list):#Quit to menu
+            return -2
+        elif entry_index == len(entry_list)-1:#Add new entry
+            return -1
+        else:
+            entry = dictionary.get(list(dictionary)[entry_index-1])
+    except ValueError:
+        print("Function error! Please make sure to choose one of the chosen options!")
+        return -3
+    except TypeError:
+        print("Function error! Please make sure to input numbers for menu selections!")
+        return -3
+    except IndexError:
+        print("Index error! Please make sure to choose one of the chosen options!")
+        return -3
     else:
-        entry = dictionary.get(list(dictionary)[entry_index-1])
-    return entry
+        return entry
 
 def checkout_book(books, authors, genres, users):
     book = search_dict(books, "Please choose a book: ")
@@ -78,9 +110,15 @@ def checkout_book(books, authors, genres, users):
         return -1
 
 def return_book(books, users):
-    user = search_dict(users, "Please choose a user: ")
-    if user == -1:
-        user = add_user(users)
+    user = ""
+    while user == "":
+        chosen_user = search_dict(users, "Please choose a user: ")
+        if chosen_user == -1:
+            chosen_user = add_user(users)
+        elif chosen_user == -2:
+            return
+        elif chosen_user != -1 and chosen_user != -2 and chosen_user != -3:
+            user = chosen_user
     borrowed = user.get_borrowed()
     if borrowed != {}:
         book_index = askMenu([books[ISBN].get_name() for ISBN in borrowed], "Please choose a book to return: ")

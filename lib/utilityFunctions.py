@@ -20,12 +20,15 @@ def askMenu(choices, text):
     user_input = input("Selection: ")
     try:
         index = int(user_input)
-        index <= len(choices) == True
-        index >= 0 == True
     except ValueError:
         print("Function error! Please make sure choose one of the chosen options!")
+        return -3
     except TypeError:
         print("Function error! Please make sure to input numbers for menu selections!")
+        return -3
+    except IndexError:
+        print("Index error! Please make sure to choose one of the chosen options!")
+        return -3
     else:
         return index
         

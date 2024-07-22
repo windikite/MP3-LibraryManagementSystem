@@ -62,7 +62,6 @@ def main():
     user_fields = ["name", "ID", "borrowed"]
     if os.path.exists(user_file_location) == True:
         imported_dict = importToDict(user_file_location, user_fields)
-        print(imported_dict)
         users = {b[1].get("ID"): User(b[1].get("name"), b[1].get("ID"), graceful_set(b[1].get("borrowed"))) for b in list(imported_dict.items())}
     else:
         users = default_users

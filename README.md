@@ -1,5 +1,11 @@
 This is my 3rd miniproject! Honestly, this was a tough one due to having to relate multiple classes together, inheriting and anticipating and fixing related issues. But, it's in a good spot right now at the end of it.
 
+Changes:  
+1. Fixed menu selection bugs when choosing out of bounds options
+2. Changed error codes in search_dict and askMenu functions to allow for better error handling  
+3. Added quit to menu option in search_dict
+4. Search_dict now also allows for retries if an error is run into until the user succeeds or decides to return to menu
+
 You can:  
 1. Add books, users, authors and genres  
 2. Check and return books for different users  
